@@ -10,7 +10,6 @@ The questions that this project proposes to answer are:<br/>
 •	Have wildfires become more or less frequent over time?<br/>
 •	What areas states are the most and least fire-prone?<br/>
 •	Seasonal impact on size and frequency? <br/>
-•	Given the size, location and date, can you predict the cause of a fire wildfire?<br/>
 
 # Resources:<br/>
 
@@ -18,7 +17,6 @@ The websites that are used in this project include: <br/>
 1.	1.88 Million US Wildfires available from Kaggle <br/>
 - Data for the project will be refined given the number and volume of data exceeding 1,213,546 fires and burning 140,132,509 acres over a 24 year period. <br/>
 - Current proposed data set to focus on the largest fires greater than 1000 acres which results in a refined fire count of 11,559 representing ~86% of the total acreage burned. <br/>
-2. www.chartjs.org <br/>
 
 # Example of Figures<br/>
 
@@ -26,4 +24,4 @@ The websites that are used in this project include: <br/>
 2. Fire frequency during the year. <br/>
 3. Fire type by location and size using Leaflet. <br/>
 4. Slider of events using Javascript (https://plotly.com/javascript/sliders/). <br/>
-
+5. Proposed library to be used www.chartjs.org <br/>
