@@ -27,5 +27,5 @@ The websites that are used in this project include: <br/>
 5. Proposed library to be used www.chartjs.org <br/>
 
 
-![image](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F281826889152668255%2F&psig=AOvVaw3NIUctFXCIjK4JGBM9AN95&ust=1606964277095000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCNj758umru0CFQAAAAAdAAAAABAD)
+![image](https://i.pinimg.com/originals/bf/e7/e1/bfe7e1743686333c87dc50ea763d70c0.jpg)
 
