@@ -23,5 +23,8 @@ The websites that are used in this project include: <br/>
 1. Geomap showing fire locations by year.<br/>
 2. Fire frequency during the year. <br/>
 3. Fire type by location and size using Leaflet. <br/>
-4. Slider of events using Javascript (https://plotly.com/javascript/sliders/). <br/>
+4. Slider of events using Javascript https://plotly.com/javascript/sliders/. <br/>
 5. Proposed library to be used www.chartjs.org <br/>
+
+
+Screen Shot 2020-11-30 at 8.18.19 PM.png
