@@ -27,4 +27,4 @@ The websites that are used in this project include: <br/>
 5. Proposed library to be used www.chartjs.org <br/>
 
 
-#![Alt text](/Desktop/sample_viz1.png?raw=true "Sample Viz")
+![image](https://user-images.githubusercontent.com/66078772/93001484-e89ca900-f4f4-11ea-9d40-eaaf7ec9ce3d.png)
