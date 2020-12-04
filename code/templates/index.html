@@ -3,28 +3,132 @@
 <html>
 
 <head>
-    <title>Wildfires</title>
+    <title>En Fuego!!!</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" crossorigin=""></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://d3js.org/d3.v6.min.js"></script>
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 
+
 <body>
-    
-    <h1>API for US Wildfires Class E, F, and G  1995-2015!</h1>
+
+    <!-- Background photo -->
+    <style>
+        body {
+            background-image: url('cranstonfire_night.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+
+    <!-- Navbar  -->
+
+    <nav class="navbar">
+
+        <ul class="nav justify-content-center">
+            <li class="nav-item active">
+                <a class="nav-link active" id="navbarRight" href="heatmap.html">Heatmap / Geospatial Analysis </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link active" id="navbarRight" href="data.html">Kaggle Data </a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link active" id="navbarRight" href="https://github.com/KaiCee2010/project2">GitHUB Page
+                </a>
+            </li>
+
+
+            </div>
+
+        </ul>
+
+    </nav>
+
+    <div class="container">
+
+        <!-- Summary table -->
+
+        <div class="row">
+            <div class="col-md-7">
+                <div class="sumbox">
+                    <h2 class="title">US Wildfire Data</h2>
+                    <p>Wildfires don’t stop where the wilderness ends. They burn through communities and neighborhoods,
+                        destroying property and taking lives. With climate-driven increases in wildfires in the U.S., it
+                        is imperative to understand how the risk to homes is also changing nationwide. The convergence
+                        of warmer, drier conditions and greater development into flammable landscapes is leaving many
+                        communities vulnerable to human-caused wildfires
+                    </p>
+                    <p>The objective of this project was to extract and explore a publicly available database of
+                        wildfires that occurred in the United States from 1992 to 2015 and includes 1.88 million
+                        geo-referenced wildfire records, representing a total of 140 million acres burned during the
+                        24-year period.
+                    </p>
+                    <p>The amount of data was to large to be run on local machines and instead required some sort of
+                        filtering to obtain a manageable size dataset that could be handled within a team setting.
+                        The data was filtered and selected in a manner that would provide an interesting overview of the
+                        fire hazard and damage done in the United States over the pact couple of decades while reviewing
+                        a small sample of the total data.
+                    </p>
+
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Wildfires Breakdown: </h5>
+                        <p class="card-text"></p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">A: 666,919 less than 0.25 acres</li>
+                        <li class="list-group-item">B: 939,376 0.26 - 9.9 acres</li>
+                        <li class="list-group-item">C: 220,077 10.0 - 99.9 acres</li>
+                        <li class="list-group-item">D: 28,427 100 - 299 acres</li>
+                        <li class="list-group-item">E: 14,107 300 - 999 acres</li>
+                        <li class="list-group-item">F: 7,786 1000 - 4999 acres</li>
+                        <li class="list-group-item">G: 3,773 5000+ acres</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <h1>API for US Wildfires Class E, F, and G 1995-2015!</h1>
     <div id="map"></div>
 
-    <!-- API key -->
-    <script type="text/javascript" src="static/js/config.js"></script>
 
-    <script src="static/js/app.js"></script>         
+    <!-- Page footer -->
+    <div id="page-container">
+        <div class="footer">
+            <p class="d">Copyright © Kaylon Young, Behrouz Zand, Rob Pascarella, Tobias Judd </p>
+        </div>
+    </div>
+
+
+    <!-- API key -->
+
+
+
 </body>
+
 </html>
