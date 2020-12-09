@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <title>Heatmap</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
+  <script src="../static/js/rSlider.min.js"></script>
+  <link rel="stylesheet" href="../static/css/rSlider.min.css">
+  <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+
+
+<body>
+
+  <!-- Background photo -->
+  <style>
+    body {
+      /* background-image: url('static/images/images1.jpg'); */
+      background-repeat: repeat;
+
+    }
+  </style>
+
+  <!-- Navbar  -->
+
+  <nav class="navbar">
+
+    <ul class="nav justify-content-center">
+      <li class="nav-item active">
+        <a class="nav-link active" id="navbarRight" href="/">Wildfire Homepage</a>
+      </li>
+
+      <li class="nav-item active">
+        <a class="nav-link active" id="navbarRight" href="/firesbyyears">Fires By Year </a>
+      </li>
+
+      <li class="nav-item active">
+        <a class="nav-link active" id="navbarRight" href="/firesbystates">Fires By States</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link active" id="navbarRight"
+          href="https://www.kaggle.com/rtatman/188-million-us-wildfires">Kaggle Data </a>
+      </li>
+
+      <li class="nav-item active">
+        <a class="nav-link active" id="navbarRight" href="https://github.com/KaiCee2010/project2">GitHUB Page
+        </a>
+      </li>
+
+
+      </div>
+
+    </ul>
+
+  </nav>
+
+
+  <!-- Figure and Content -->
+  <div class="container">
+      <!-- Portfolio Item Heading -->
+    <h1 class="my-4">Fires</h1><br>
+    <h4>Class G  - +5000 Acres</h4>
+    <h6>Drag the Slider to Filter the Visualizations</h6>
+
+    <!-- Portfolio Item Row -->
+    <div class="row">
+      <div class="col-md-9">
+        <div class="slider-container">
+          <input type="text" id="slider" class="slider" />
+          <br>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8">
+        <h3 class="my-4">Fires by Year</h3>
+      </div>
+      <div class="col-md-4">
+        <h3 class="my-3">Top Ten Fires</h3>
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8">
+        <div id="map"></div>
+      </div>
+      <div class="col-md-4">
+        <div id="bar"></div>
+        <br>
+      </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Related Projects Row -->
+    <h3 class="my-4">Related Projects</h3>
+
+    <div class="row">
+      <div class="col-md-3">
+        <h3 class="my-3">Project Description</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+        <h3 class="my-3">Project Details</h3>
+        <ul>
+          <li>Lorem Ipsum</li>
+          <li>Dolor Sit Amet</li>
+          <li>Consectetur</li>
+          <li>Adipiscing Elit</li>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <div id="scatter"></div>
+        <br>
+      </div>
+      <div class="col-md-3">
+        <br>
+      </div>
+    </div>
+    <!-- /.row -->
+    
+  </div>
+
+  
+  
+  <script type="text/javascript" src="../static/js/config.js"></script>
+  <script src="../static/js/app.js"></script>
+  <!-- <script src="../static/js/choropleth.js"></script> -->
+  
+
+
+</body>
+
+</html>

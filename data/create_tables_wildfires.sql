@@ -21,15 +21,15 @@ CREATE TABLE "wildfires" (
     "fire_year" SMALLINT,
     "discovery_doy" INT,
     "discovery_time" VARCHAR(4),
-    "stat_cause_code" VARCHAR,
+    "stat_cause_code" DECIMAL,
     "stat_cause_descr" VARCHAR(100),
     "cont_doy" INT,
     "cont_time" VARCHAR(4),
-    "fire_size" VARCHAR ,
+    "fire_size" DECIMAL ,
     "fire_size_class" VARCHAR(1),
-    "latitude" VARCHAR,
-    "longitude" VARCHAR,
-    "owner_code" VARCHAR,
+    "latitude" DECIMAL,
+    "longitude" DECIMAL,
+    "owner_code" DECIMAL,
     "owner_descr" VARCHAR(100),
     "state" VARCHAR(255),
     "county" VARCHAR(255),
@@ -38,8 +38,9 @@ CREATE TABLE "wildfires" (
 	"shape" VARCHAR(6),
     "discovery_date_converted" DATE,
     "cont_date_converted" DATE,
+	"burning_days" DECIMAL,
+    "state_name" VARCHAR,
     CONSTRAINT "pk_wildfires" PRIMARY KEY (
         "objectid"
      )
 );
-

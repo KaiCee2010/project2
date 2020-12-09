@@ -30,7 +30,7 @@
     <!-- Background photo -->
     <!-- <style>
         body {
-            background-image: url('cranstonfire_night.jpg');
+            background-image: url('static/images/cranstonfire_night.jpg');
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
@@ -43,11 +43,20 @@
 
         <ul class="nav justify-content-center">
             <li class="nav-item active">
-                <a class="nav-link active" id="navbarRight" href="heatmap.html">Heatmap / Geospatial Analysis </a>
+                <a class="nav-link active" id="navbarRight" href="/">Wildfire Homepage</a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link active" id="navbarRight" href="/firesbyyears">Fires by Years</a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link active" id="navbarRight" href="/firesbystates">Fires by State</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link active" id="navbarRight" href="data.html">Kaggle Data </a>
+                <a class="nav-link active" id="navbarRight"
+                    href="https://www.kaggle.com/rtatman/188-million-us-wildfires">Kaggle Data </a>
             </li>
 
             <li class="nav-item active">
@@ -62,14 +71,30 @@
 
     </nav>
 
+
     <div class="container">
 
-        <!-- Summary table -->
 
-        <div class="row">
-            <div class="col-md-7">
+
+
+        <!-- Jumbotron -->
+        <div class="jumbotron text-center">
+            <div class="col-md-12">
+
+                <strong>
+                    <h1 class="display-4" style="color: black ">United States Wildfire Data</h1>
+                </strong>
+
+                <!-- Youtube Video -->
+
+                <iframe width="950" height="450" src="https://www.youtube.com/embed/nhU5TXwAqN8?autoplay=1">
+
+                </iframe>
+
+
+
+                <!-- Summary table -->
                 <div class="sumbox">
-                    <h2 class="title">US Wildfire Data</h2>
                     <p>Wildfires don’t stop where the wilderness ends. They burn through communities and neighborhoods,
                         destroying property and taking lives. With climate-driven increases in wildfires in the U.S., it
                         is imperative to understand how the risk to homes is also changing nationwide. The convergence
@@ -91,31 +116,52 @@
                 </div>
 
             </div>
-            <div class="col-md-4">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Wildfires Breakdown: </h5>
-                        <p class="card-text"></p>
+
+        </div>
+
+
+
+        <!-- <!-- <div class="row"> -->
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-lg-4 col-md-5">
+                    <div class="card" style="width: 22rem;">
+                        <div class="card-body">
+                            <h5 class="card-title"> </h5>
+                            <h5 class="card-title">Total Wildfires Breakdown: </h5>
+                            <p class="card-text"></p>
+                            <pre class="tab">Type / Quantity        Description</pre>
+                            <pre class="tab">A: 666,919         less than 0.25 acres</pre>
+                            <pre class="tab">B: 939,376         0.26 - 9.9 acres</pre>
+                            <pre class="tab">C: 220,077         10.0 - 99.9 acres</pre>
+                            <pre class="tab">D:  28,427         100 - 299 acres</pre>
+                            <pre class="tab">E:  14,107         300 - 999 acres</pre>
+                            <pre class="tab">F:   7,786         1000 - 4999 acres</pre>
+                            <pre class="tab">G:   3,773         5000+ acres</pre>
+                            </ul>
+                            <h5 class="card-title"> </h5>
+                            <h5 class="card-title"> </h5>
+                        </div>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">A: 666,919 less than 0.25 acres</li>
-                        <li class="list-group-item">B: 939,376 0.26 - 9.9 acres</li>
-                        <li class="list-group-item">C: 220,077 10.0 - 99.9 acres</li>
-                        <li class="list-group-item">D: 28,427 100 - 299 acres</li>
-                        <li class="list-group-item">E: 14,107 300 - 999 acres</li>
-                        <li class="list-group-item">F: 7,786 1000 - 4999 acres</li>
-                        <li class="list-group-item">G: 3,773 5000+ acres</li>
-                    </ul>
+                </div>
+
+                <div class="col-lg-8 col-md-5">
+
+                    <img src="static/images/nederland.jpg" alt="Local Fire" id="plotbox-img">
+
                 </div>
             </div>
         </div>
     </div>
 
+
+
+    </div>
     </div>
 
-    <h1>API for US Wildfires Class E, F, and G 1995-2015!</h1>
-    <div id="map"></div>
-
+    </div>
 
     <!-- Page footer -->
     <div id="page-container">
