@@ -100,6 +100,39 @@ def state():
         dataReturn.append(stateDict)
     return jsonify(dataReturn)
 
+# @app.route('/top_per_state')
+# def top_per_state(): 
+#     top_fires={}
+#     session=Session(engine)
+#     states_list=session.query(wildfires.state).distinct().all()
+#     for each_state in states_list: 
+#         top=session.query(wildfires.fire_size, wildfires.longitude, wildfires.latitude).filter(wildfires.state==each_state).order_by(desc(wildfires.fire_size)).limit(10).all()
+#         top_fires[each_state[0]]=[x[0] for x in top]
+#     session.close
+#     return jsonify(top_fires)
+
+
+@app.route("/cause")
+def cause():
+
+    session = Session(engine)
+    results = session.query(wildfires.state, wildfires.stat_cause_descr, func.count(wildfires.objectid).label("total_causes")).group_by(wildfires.state, wildfires.stat_cause_descr).all()
+    session.close
+
+    dataReturn=[]
+    for cause in results:
+        stateDict={
+            "state": cause.state,
+            "cause": cause.stat_cause_descr,
+            "total_causes": cause.total_causes
+            
+        }
+        dataReturn.append(stateDict)
+    return jsonify(dataReturn)
+
+
+
+
 
 @app.route("/stcty")
 def stcty():
