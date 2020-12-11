@@ -71,8 +71,8 @@ function optionChanged() {
 				labels: name,
 				datasets: [{
 					label: `Number of Fires By County - ${sel_val}`,
-					backgroundColor: 'rgb(255, 99, 132)',
-					borderColor: 'rgb(255, 99, 132)',
+					backgroundColor: 'orange',
+					borderColor: 'orange',
 					data: count
 				}]
 			},
@@ -95,17 +95,7 @@ function optionChanged() {
 		});
 	
 		console.log("state filtered", statefiltered)
-		
-		// var cause = []
-		// var causeCount = []
-		// var stateAbbr = []
-		
-		// statefilteredCause.forEach(function(data) {
-			
-		// 		cause.push(data.cause)
-		// 		causeCount.push(data.total_causes)
-		// 		stateAbbr.push(data.state)
-		// 	});
+
 		var cause =  statefilteredCause.map(function(d){
 			return d.cause
 		});
@@ -117,8 +107,7 @@ function optionChanged() {
 
 			console.log("cause", cause)
 			console.log("cause count", causeCount)
-			// console.log("state", stateAbbr)
-			
+
 		d3.select("#canvasBarChart2")
 			.append("canvas")
 			.attr("id", "myBarChart2")	
@@ -135,15 +124,17 @@ function optionChanged() {
 				labels: cause,
 				datasets: [{
 					label: `Number of Fires By Cause - ${sel_val}`,
-					backgroundColor: 'rgb(255, 99, 132)',
-					borderColor: 'rgb(255, 99, 132)',
-					// data: [0, 10, 5, 2, 20, 30, 45]
+					backgroundColor: '#dbba1b',
+					borderColor: '#dbba1b',
 					data: causeCount
 				}]
 			},
 		
 			// Configuration options go here
-			options: {scales: {
+			options: {chartArea: {
+				backgroundColor: 'rgba(251, 85, 85, 0.4)'
+			},
+			scales: {
 				yAxes: [{
 					ticks: {
 						beginAtZero: true
@@ -166,11 +157,11 @@ function optionChanged() {
 		console.log(states)
 		console.log(total_fires)
 
-		var latlongVals = latlong(sel_val)
+		var choroVals = getVals(sel_val)
 
-		console.log(latlongVals)
-		console.log("lat", latlongVals.lat)
-		console.log("long", latlongVals.long)
+		console.log(choroVals)
+		console.log("lat", choroVals.lat)
+		console.log("long", choroVals.long)
 		
 		var data = [{
 				type: "choroplethmapbox", locations: states, z: total_fires,
@@ -180,9 +171,9 @@ function optionChanged() {
 				geojson: "https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json"
 			}];
 			
-			var layout = {mapbox: {center: {lon: latlongVals.long , lat: latlongVals.lat, }, 
+			var layout = {mapbox: {center: {lon: choroVals.long, lat: choroVals.lat}, 
 							style: 'light',
-							zoom: 5},
+							zoom: choroVals.zoom},
 							width: 600, height:400,
 							margin: {
 								l: 5,
@@ -232,13 +223,13 @@ function optionChanged() {
 				name: topFiresID,
 				type: "bar",
 				orientation: "h",
-				text: `topFiresID`,
-				opacity: 0.5,
+				text: `Acres Effected`,
+				opacity: 1,
 				marker: {
-				color: 'rgb(158,202,225)',
+				color: '#bc0f0f',
 				line: {
-				  color: 'rgb(8,48,107)',
-				  width: 1.5
+					color: '#bc0f0f',
+				  	width: 1.5
 				}
 			  }
 				
@@ -248,7 +239,11 @@ function optionChanged() {
 		  
 		  
 			  var layout = {
-				  title: `State: ${sel_val}`,
+				  title: `<b>State: ${sel_val}</b>`,
+				  titlefont: {
+					size: 24,
+					color: '2d2d2d'
+				  },
 				  margin: {
 					l: 50,
 					r: 50,
@@ -256,16 +251,23 @@ function optionChanged() {
 					t: 100,
 					pad: 4
 				  },
-				  paper_bgcolor: '#7f7f7f',
-				  plot_bgcolor: '#c7c7c7',
+				  plot_bgcolor: 'white',
 				  xaxis: {
-					  title:"Number of Acres",
+					  title:"<b>Number of Acres</b>",
+					  titlefont: {
+						size: 20,
+						color: '2d2d2d'
+					  },
 					  range: [0, 700000],
 					  automargin: true,
 					  
 				  },
 				  yaxis: {
-					  title: "Fire Name",
+					  title: "<b>Fire Name</b>", 
+					  titlefont: {
+						size: 20,
+						color: '2d2d2d'
+					  },
 					  autorange:'reversed',
 					  type: "category",
 					  automargin: true,
@@ -288,40 +290,196 @@ function onlyUnique(value,index, self) {
 	return self.indexOf(value) === index;	
 }
 
-function latlong(sel_val){
+function getVals(sel_val){
 	if (sel_val === "AK"){
 		var lat = 63.588753
 		var long = -154.493062
+		var zoom = 3
 	}
 	else if (sel_val === "AL"){
 		var lat = 32.318231
 		var long = -86.902298
+		var zoom = 5
 	}
 	else if (sel_val === "AR"){
 		var lat = 35.20105
 		var long = -91.831833
+		var zoom = 5
 	}
 	else if (sel_val === "AZ"){
 		var lat = 34.048928
 		var long = -111.093731
+		var zoom = 5
 	}
 	else if (sel_val === "CA"){
 		var lat = 36.778261
 		var long = -119.417932
+		var zoom = 4
 	}
 	else if (sel_val === "CO"){
 		var lat = 39.550051
 		var long = -105.782067
+		var zoom = 5
 	}
 	else if (sel_val === "FL"){
 		var lat = 27.664827
 		var long = -81.515754
+		var zoom = 5
+	}
+	else if (sel_val === "GA"){
+		var lat = 32.157435
+		var long = -82.907123
+		var zoom = 5
+	}
+	else if (sel_val === "ID"){
+		var lat = 44.068202
+
+		var long = -114.742041
+		var zoom = 4
+
+	}
+	else if (sel_val === "KS"){
+		var lat = 39.011902
+
+		var long = -98.484246
+		var zoom = 5
+
+	}
+	else if (sel_val === "LA"){
+		var lat = 31.244823
+
+		var long = -92.145024
+		var zoom = 5
+
+	}
+	else if (sel_val === "MI"){
+		var lat = 44.314844
+
+		var long = -85.602364
+		var zoom = 5
+
+	}
+	else if (sel_val === "MN"){
+		var lat = 46.729553
+
+		var long = -94.6859
+		var zoom = 5
+
+	}
+	else if (sel_val === "MS"){
+		var lat = 32.354668
+
+		var long = -89.398528
+		var zoom = 5
+
+	}
+	else if (sel_val === "MT"){
+		var lat = 46.879682
+
+		var long = -110.362566
+		var zoom = 4.8
+
+	}
+	else if (sel_val === "NC"){
+		var lat = 35.759573
+
+		var long = -79.0193
+		var zoom = 5
+
+	}
+	else if (sel_val === "NM"){
+		var lat = 34.97273
+
+		var long = -105.032363
+		var zoom = 5
+
+	}
+	else if (sel_val === "NE"){
+		var lat = 41.492537
+
+		var long = -99.901813
+
+		var zoom = 5
+	}
+	else if (sel_val === "NV"){
+		var lat = 38.80261
+
+		var long = -116.419389
+
+		var zoom = 4.8
+	}
+
+	else if (sel_val === "OK"){
+		var lat = 35.007752
+
+		var long = -97.092877
+		var zoom = 5
+
+	}
+	else if (sel_val === "OR"){
+		var lat = 43.804133
+
+		var long = -120.554201
+		var zoom = 5
+
+	}
+	else if (sel_val === "SD"){
+		var lat = 43.969515
+
+		var long = -99.901813
+		var zoom = 5
+
+	}
+	else if (sel_val === "TX"){
+		var lat = 31.968599
+
+		var long = -99.901813
+		var zoom = 4
+
+
+	}
+	else if (sel_val === "UT"){
+		var lat = 39.32098
+
+		var long = -111.093731
+
+		var zoom = 5
+
+	}
+	else if (sel_val === "VA"){
+		var lat = 37.431573
+
+		var long = -78.656894
+		var zoom = 5
+
+	}
+	else if (sel_val === "WA"){
+		var lat = 47.751074
+
+		var long = -120.740139
+		var zoom = 5
+
+	}
+	else if (sel_val === "WV"){
+		var lat = 38.597626
+
+		var long = -80.454903
+		var zoom = 5
+
+	}
+	else if (sel_val === "WY"){
+		var lat = 43.075968
+
+		var long = -107.290284
+		var zoom = 5
+
 	}
 	else {
 		var lat = 44.53155795563836
 		var long = -102.61109623371827
+		var zoom = 1
 	}
-	return {lat, long}
+	return {lat, long, zoom}
 
 	}
 

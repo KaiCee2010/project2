@@ -1,12 +1,11 @@
 body {
     padding: 0px;
     margin: 0px;
+    height: 100%;
+    background-color: rgb(226, 226, 226)
   }
+
   
- 
-
-
-  body,
   html {
     height: 100%;
   }
@@ -17,7 +16,7 @@ body {
     width: 100%
   }
 
-  .summary{background-color: white;}
+  .summary{background-color: rgb(231, 231, 231);}
 
   .legend {
     line-height: 20px;
@@ -62,7 +61,12 @@ body {
   z-index: 1;
 }
 
+#scatter {background-color: #ffffff;}
+
+
 /* = Summary */
+
+
 
   .sumbox {
     text-align: left;

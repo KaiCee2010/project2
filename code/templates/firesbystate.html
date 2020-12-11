@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <title>Fires By State</title>
+  <title>Wildfires By State</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -45,15 +45,15 @@
 
     <ul class="nav justify-content-center">
       <li class="nav-item active">
-        <a class="nav-link active" id="navbarRight" href="/">Wildfire Homepage</a>
+        <a class="nav-link active" id="navbarRight" href="/">Wildfires Homepage</a>
       </li>
 
       <li class="nav-item active">
-        <a class="nav-link active" id="navbarRight" href="/firesbyyears">Fires By Year </a>
+        <a class="nav-link active" id="navbarRight" href="/firesbyyears">Wildfires By Year </a>
       </li>
 
       <li class="nav-item active">
-        <a class="nav-link active" id="navbarRight" href="/firesbystate">Fires By States</a>
+        <a class="nav-link active" id="navbarRight" href="/firesbystate">Wildfires By State</a>
       </li>
 
       <li class="nav-item">
@@ -75,13 +75,17 @@
 
 
   <!-- Figure and Content -->
-  <body class="bg-secondary">
-    <h1>Fires By State</h1>
-	<div class="row">
+  <body >
+    
+    <div class="row">
       <div class="col-md-4 offset-md-1">
           <br>
-          <br>
-          <h5>Select a State:</h5><select id="selDataset" onchange="optionChanged()" ></select>
+          <h3>Wildfires By State</h3>
+      </div>
+  </div>
+	<div class="row">
+      <div class="col-md-4 offset-md-1">
+          <h5>Select a State:  <select id="selDataset" onchange="optionChanged()"></select></h5>
       </div>
   </div>
   <br>

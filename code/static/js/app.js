@@ -1,3 +1,14 @@
+// function getColor(depth){
+//   return depth > 500000 ? '#770505' :
+//          depth > 250000 ? '#ba0b0b' :
+//          depth > 100000 ? '#d24f2b' :
+//          depth > 50000 ? '#dc761d' :
+//          depth > 0 ? '#f2ba28' :
+//                       '#f2ba28' ;
+         
+// }
+
+
 
 var flameIcon = L.Icon.extend({
   options: {
@@ -51,13 +62,19 @@ var myMap = L.map("map", {
   var markers = L.layerGroup()
 
 
+
   var vals = slider.getValue()
 
   var link = "../static/data/us_states_500k.json"
   
   function addMarkers(vals){
   // Add a marker to the map for each crime
+
+
+
   Promise.all([d3.json("/data"), d3.json("/state")]).then(function(response){
+
+    
     
     console.log(response[0])
 
@@ -108,6 +125,29 @@ var myMap = L.map("map", {
     });
 
     myMap.addLayer(markers)
+
+
+    // var legend = L.control({position: 'bottomright'});
+    // legend.onAdd = function (myMap) {
+
+    //     var div = L.DomUtil.create('div', 'info legend'),
+    //     depthArray = [0, 50000, 100000, 250000, 500000],
+    //     labels = [];
+
+    //     // loop through our density intervals and generate a label with a colored square for each interval
+    //     for (var i = 0; i < depthArray.length; i++) {
+    //         div.innerHTML +=
+    //             '<i style="background:' + depthArray[i] + 1 + '  "></i> ' + '&nbsp&nbsp&nbsp' +
+    //             depthArray[i] + (depthArray[i + 1] ? '&ndash;' + depthArray[i + 1] + '<br>' : '+');
+    //     }
+
+    //     return div;
+    // };
+
+    // legend.addTo(myMap)
+
+
+
        
 
     var top10Fires = filteredData.filter(function(d, i){
@@ -138,30 +178,35 @@ var myMap = L.map("map", {
       type: "bar",
       orientation: "h",
       text: `topFiresID`,
-      opacity: 0.5,
+      // opacity: 0.5,
       marker: {
-      color: 'rgb(158,202,225)',
+      color: '#ba0b0b',
       line: {
-        color: 'rgb(8,48,107)',
+        color: '#ba0b0b',
         width: 1.5
       }
     }
       
     };
 
+
     var plotData = [trace1]
 
     console.log("for plot title", year1, year2)
     if (year1 === year2){
-      var titleText = `Top Ten Fires ${year1}`
+      var titleText = `<b>Top Ten Fires ${year1}</b>`
     }
     else {
-      var titleText = `Top Ten Fires ${year1} - ${year2}`
+      var titleText = `<b>Top Ten Fires ${year1} - ${year2}</b>`
     }
 
 
     var layout = {
         title: titleText,
+        titlefont: {
+					size: 20,
+					color: '2d2d2d'
+				  },
         margin: {
           l: 50,
           r: 50,
@@ -169,16 +214,23 @@ var myMap = L.map("map", {
           t: 100,
           pad: 4
         },
-        paper_bgcolor: '#7f7f7f',
-        plot_bgcolor: '#c7c7c7',
+        plot_bgcolor: 'white',
         xaxis: {
-            title:"Number of Acres",
+            title:"<b>Number of Acres</b>",
+            titlefont: {
+              size: 18,
+              color: '2d2d2d'
+              },
             range: [0, 700000],
             automargin: true,
             
         },
         yaxis: {
-            title: "Fire Name",
+            title: "<b>Fire Name</b>",
+            titlefont: {
+              size: 18,
+              color: '2d2d2d'
+              },
             autorange:'reversed',
             type: "category",
             automargin: true,
@@ -381,7 +433,10 @@ var myMap = L.map("map", {
         type: 'scatter',
         data: {
             datasets: [{
-                label: 'Scatter Dataset',
+                label: 'Fire Size vs. Day Before Contained',
+                backgroundColor: '#ff8827',
+                borderColor: '#898888',
+                pointRadius: 8,
                 data: scatterData
             }]
         },

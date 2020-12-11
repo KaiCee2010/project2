@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <title>Heatmap</title>
+  <title>Wildfires By Years</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -46,15 +46,15 @@
 
     <ul class="nav justify-content-center">
       <li class="nav-item active">
-        <a class="nav-link active" id="navbarRight" href="/">Wildfire Homepage</a>
+        <a class="nav-link active" id="navbarRight" href="/">Wildfires Homepage</a>
       </li>
 
       <li class="nav-item active">
-        <a class="nav-link active" id="navbarRight" href="/firesbyyears">Fires By Year </a>
+        <a class="nav-link active" id="navbarRight" href="/firesbyyears">Wildfires By Year </a>
       </li>
 
       <li class="nav-item active">
-        <a class="nav-link active" id="navbarRight" href="/firesbystate">Fires By States</a>
+        <a class="nav-link active" id="navbarRight" href="/firesbystate">Wildfires By State</a>
       </li>
 
       <li class="nav-item">
@@ -78,13 +78,11 @@
   <!-- Figure and Content -->
   <div class="container">
       <!-- Portfolio Item Heading -->
-    <h1 class="my-4">Fires</h1><br>
-    <h4>Class G  - +5000 Acres</h4>
-    <h6>Drag the Slider to Filter the Visualizations</h6>
+    <h3 class="my-4">Wildfires -  Class G</h3>   
 
     <!-- Portfolio Item Row -->
     <div class="row">
-      <div class="col-md-9">
+      <div class="col-md-7">
         <div class="slider-container">
           <input type="text" id="slider" class="slider" />
           <br>
@@ -92,15 +90,6 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-8">
-        <h3 class="my-4">Fires by Year</h3>
-      </div>
-      <div class="col-md-4">
-        <h3 class="my-3">Top Ten Fires</h3>
-        <br>
-      </div>
-    </div>
     <div class="row">
       <div class="col-md-8">
         <div id="map"></div>
@@ -113,25 +102,19 @@
     <!-- /.row -->
 
     <!-- Related Projects Row -->
-    <h3 class="my-4">Related Projects</h3>
-
+    <br>
+    <br>
     <div class="row">
       <div class="col-md-3">
-        <h3 class="my-3">Project Description</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-        <h3 class="my-3">Project Details</h3>
-        <ul>
-          <li>Lorem Ipsum</li>
-          <li>Dolor Sit Amet</li>
-          <li>Consectetur</li>
-          <li>Adipiscing Elit</li>
-        </ul>
+        <h4 class="my-3">Wildfire Size <br>vs<br>Days Before Contained</h4>
+        <p>There are outliers on both sides.  The majority of class G wildfires burn for a short amount of time and less acreage is effected.</p>
       </div>
       <div class="col-md-9">
         <div id="canvasScatterChart">
           <!-- <div id="scatter"></div> -->
           <canvas id="scatter"></canvas>
         </div>
+        <br>
         <br>
       </div>
       <div class="col-md-3">
