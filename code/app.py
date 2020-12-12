@@ -12,7 +12,12 @@ from sqlalchemy import desc
 from flask import Flask, jsonify, render_template
 from config import Posgres_Pswrd
 
-engine = create_engine(f"postgres://postgres:{Posgres_Pswrd}@localhost:5432/wildfires_db")
+try:
+    db_uri = os.environ['DATABASE_URL']
+except KeyError:
+    db_uri = f"postgres://postgres:{Posgres_Pswrd}@localhost:5432/wildfires_db"
+
+engine = create_engine(db_uri)
 
 Base = declarative_base()
 Base.metadata.create_all(engine)
@@ -74,7 +79,7 @@ def home():
 def findall():
 
     session = Session(bind=engine)
-    results = session.query(wildfires).all()
+    results = session.query(wildfires).order_by(desc(wildfires.fire_size)).all()
     session.close()
 
     dataReturn=[]

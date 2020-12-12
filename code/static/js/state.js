@@ -1,27 +1,32 @@
+//Let's get after it
 
-
-
+//Create funtion for option change
 
 optionChanged()
 
 function optionChanged() {
 
+	//Read all the datasets
 	Promise.all([d3.json("/stcty"), d3.json("/cause"), d3.json("/totalstate"), d3.json("/data") ]).then(function(fireData){
 		
+		
+		//remove the bar chart if it exists, so it can be recreated
 		d3.select("#myBarChart").remove()
-        
-        
+              
 		
 		console.log("firedata", fireData[0])
-		
+
+		//Save the state abbreviation to a variable
 		var abbr = fireData[0].map(function(d){
 			return d.abbr
 		})
 		
-		var unique = abbr.filter(onlyUnique)
-				
+		//Find unique state values
+		var unique = abbr.filter(onlyUnique)	
 		console.log("state names", unique)
+
 		
+		//Add state values to the dropdown
 		d3.select("#selDataset")
 			.selectAll("option")
 			.data(unique)
@@ -31,17 +36,25 @@ function optionChanged() {
 				return `${d}`;
 			});
 		
+		//Grab the dropdown value and save it to a variable
 		var sel = document.getElementById('selDataset');
 		var sel_val = sel.options[sel.selectedIndex].value
 		console.log(sel_val)
 		
-		
+		//filter the data by the state abbr
 		var statefiltered = fireData[0].filter(function(data) {
             return String(data.abbr) === sel_val;
         });
 
 		console.log("state filtered", statefiltered)
 		
+
+		//CREATING CHART JS BAR CHART FOR COUNTY TOTALS
+		/////////////////////////////////////////
+		/////////////////////////////////////////
+		
+		
+		//Create to variables to save out counties and fire totals.
 		var name = []
 		var count = []
 		
@@ -55,13 +68,14 @@ function optionChanged() {
 		});
 
 	
+		//Add the canvas back to the html
 		d3.select("#canvasBarChart")
 		.append("canvas")
 		.attr("id", "myBarChart")
 		
+
+		//Create the bar chart for state totals
 		var ctx = document.getElementById('myBarChart').getContext('2d');
-	
-	
 		var myBarchart = new Chart(ctx, {
 			// The type of chart we want to create
 			type: 'bar',
@@ -88,14 +102,22 @@ function optionChanged() {
 		});
 
 
+		//CREATING CHART JS BAR CHART FOR CAUSE TOTALS
+		/////////////////////////////////////////
+		/////////////////////////////////////////
+
+		//If cause bar chart exists, blast it away
 		d3.select("#myBarChart2").remove()
 
+		//Filter the cause dataset
 		var statefilteredCause = fireData[1].filter(function(data) {
 			return String(data.state) === sel_val;
 		});
 	
 		console.log("state filtered", statefiltered)
 
+
+		//Save cause and cause count data to variables
 		var cause =  statefilteredCause.map(function(d){
 			return d.cause
 		});
@@ -105,16 +127,18 @@ function optionChanged() {
 		});
 
 
-			console.log("cause", cause)
-			console.log("cause count", causeCount)
+		console.log("cause", cause)
+		console.log("cause count", causeCount)
 
+
+		//Add the cause chart canvas back to the html
 		d3.select("#canvasBarChart2")
 			.append("canvas")
 			.attr("id", "myBarChart2")	
-			
+
+		
+		//Create cause bar chart	
 		var ctxBar2 = document.getElementById('myBarChart2').getContext('2d');
-		
-		
 		var myBarChart2 = new Chart(ctxBar2, {
 			// The type of chart we want to create
 			type: 'bar',
@@ -144,9 +168,13 @@ function optionChanged() {
 		});
 	
 
-		console.log(fireData);
+		
+		//CREATING PLOTLY CHOROPLETH MAP
+		/////////////////////////////////////////
+		/////////////////////////////////////////
 
-
+		
+		//Grab state and total fire data
 		var states =  fireData[2].map(function(d){
 			return d.state
 		});
@@ -157,12 +185,16 @@ function optionChanged() {
 		console.log(states)
 		console.log(total_fires)
 
+		//Call getVals function to get latitude, longitude, and zoom
+		//level for map refresh
 		var choroVals = getVals(sel_val)
 
 		console.log(choroVals)
 		console.log("lat", choroVals.lat)
 		console.log("long", choroVals.long)
 		
+		
+		//Create choropleth map
 		var data = [{
 				type: "choroplethmapbox", locations: states, z: total_fires,
 				colorscale: "Hot", 
@@ -184,62 +216,71 @@ function optionChanged() {
 							  }
 							};
 			
-			var config = {mapboxAccessToken: API_KEY};
-			
-			Plotly.newPlot('myDiv', data, layout, config);
+		var config = {mapboxAccessToken: API_KEY};
+		
+		Plotly.newPlot('myDiv', data, layout, config);
 
 
+		//CREATING PLOTLY HORIZONTAL BAR CHART FOR TOP TEN
+		/////////////////////////////////////////
+		/////////////////////////////////////////
 
-			var statefilteredTop = fireData[3].filter(function(data) {
-				return String(data.state) === sel_val;
-			});
+		//Filter dataset by state
+		var statefilteredTop = fireData[3].filter(function(data) {
+			return String(data.state) === sel_val;
+		});
 
-			console.log("statefiltered top", statefilteredTop)
+		console.log("statefiltered top", statefilteredTop)
 
-			var top10Fires = statefilteredTop.filter(function(d, i){
-				return i<10
-			  })
-		  
-			  console.log("top 10 fires", top10Fires)
-		  
-			  var topFiresSize =  top10Fires.map(function(d){
-				return d.fire_size
-			  });
-		  
-			  var topFiresName =  top10Fires.map(function(d){
-				return d.fire_name
-			  });
-		  
-			  var topFiresID =  top10Fires.map(function(d){
-				return d.fod_id
-			  });
-		  
-			  console.log("topFireSize", topFiresSize)
-			  console.log("topFireName", topFiresName)
-		  
-			  var trace1 = {
-				x: topFiresSize,
-				y: topFiresName,
-				name: topFiresID,
-				type: "bar",
-				orientation: "h",
-				text: `Acres Effected`,
-				opacity: 1,
-				marker: {
+		//Grap the top ten fires
+		var top10Fires = statefilteredTop.filter(function(d, i){
+			return i<10
+			})
+		
+		console.log("top 10 fires", top10Fires)
+
+
+		//Save fire size, name and fire id to variables	
+		var topFiresSize =  top10Fires.map(function(d){
+		return d.fire_size
+		});
+	
+		var topFiresName =  top10Fires.map(function(d){
+		return d.fire_name
+		});
+	
+		var topFiresID =  top10Fires.map(function(d){
+		return d.fod_id
+		});
+	
+		console.log("topFireSize", topFiresSize)
+		console.log("topFireName", topFiresName)
+
+
+		//Create the plot horizonatl bar chart		
+			var trace1 = {
+			x: topFiresSize,
+			y: topFiresName,
+			name: topFiresID,
+			type: "bar",
+			orientation: "h",
+			text: `Acres Effected`,
+			opacity: 1,
+			marker: {
+			color: '#bc0f0f',
+			line: {
 				color: '#bc0f0f',
-				line: {
-					color: '#bc0f0f',
-				  	width: 1.5
-				}
-			  }
-				
-			  };
-		  
-			  var plotData = [trace1]
+				width: 1.5
+			}
+			}
+			
+			};
+		
+			var plotData = [trace1]
 		  
 		  
 			  var layout = {
-				  title: `<b>State: ${sel_val}</b>`,
+				  title: `<b>Top Ten Fires<br>State: ${sel_val}</b>`,
 				  titlefont: {
 					size: 24,
 					color: '2d2d2d'
@@ -286,15 +327,20 @@ function optionChanged() {
 
 }
 
+
+//Unique function
 function onlyUnique(value,index, self) {
 	return self.indexOf(value) === index;	
 }
 
+
+
+//getVals function to get center of state and zoom level for choropleth map
 function getVals(sel_val){
 	if (sel_val === "AK"){
 		var lat = 63.588753
 		var long = -154.493062
-		var zoom = 3
+		var zoom = 2.5
 	}
 	else if (sel_val === "AL"){
 		var lat = 32.318231
@@ -304,7 +350,7 @@ function getVals(sel_val){
 	else if (sel_val === "AR"){
 		var lat = 35.20105
 		var long = -91.831833
-		var zoom = 5
+		var zoom = 5.4
 	}
 	else if (sel_val === "AZ"){
 		var lat = 34.048928
@@ -312,44 +358,43 @@ function getVals(sel_val){
 		var zoom = 5
 	}
 	else if (sel_val === "CA"){
-		var lat = 36.778261
+		var lat = 37.778261
 		var long = -119.417932
-		var zoom = 4
+		var zoom = 4.3
 	}
 	else if (sel_val === "CO"){
-		var lat = 39.550051
+		var lat = 39.050051
 		var long = -105.782067
 		var zoom = 5
 	}
 	else if (sel_val === "FL"){
 		var lat = 27.664827
-		var long = -81.515754
+		var long = -82.515754
 		var zoom = 5
 	}
 	else if (sel_val === "GA"){
-		var lat = 32.157435
-		var long = -82.907123
-		var zoom = 5
+		var lat = 33.157435
+		var long = -83.907123
+		var zoom = 5.3
 	}
 	else if (sel_val === "ID"){
-		var lat = 44.068202
-
+		var lat = 45.568202
 		var long = -114.742041
-		var zoom = 4
+		var zoom = 4.5
 
 	}
 	else if (sel_val === "KS"){
 		var lat = 39.011902
 
 		var long = -98.484246
-		var zoom = 5
+		var zoom = 5.3
 
 	}
 	else if (sel_val === "LA"){
 		var lat = 31.244823
 
 		var long = -92.145024
-		var zoom = 5
+		var zoom = 5.7
 
 	}
 	else if (sel_val === "MI"){
@@ -363,21 +408,21 @@ function getVals(sel_val){
 		var lat = 46.729553
 
 		var long = -94.6859
-		var zoom = 5
+		var zoom = 4.8
 
 	}
 	else if (sel_val === "MS"){
 		var lat = 32.354668
 
 		var long = -89.398528
-		var zoom = 5
+		var zoom = 5.3
 
 	}
 	else if (sel_val === "MT"){
 		var lat = 46.879682
 
 		var long = -110.362566
-		var zoom = 4.8
+		var zoom = 4.7
 
 	}
 	else if (sel_val === "NC"){
@@ -388,9 +433,8 @@ function getVals(sel_val){
 
 	}
 	else if (sel_val === "NM"){
-		var lat = 34.97273
-
-		var long = -105.032363
+		var lat = 33.97273
+		var long = -106.032363
 		var zoom = 5
 
 	}
@@ -399,7 +443,7 @@ function getVals(sel_val){
 
 		var long = -99.901813
 
-		var zoom = 5
+		var zoom = 5.2
 	}
 	else if (sel_val === "NV"){
 		var lat = 38.80261
@@ -410,31 +454,31 @@ function getVals(sel_val){
 	}
 
 	else if (sel_val === "OK"){
-		var lat = 35.007752
+		var lat = 36.007752
 
-		var long = -97.092877
-		var zoom = 5
+		var long = -98.412877
+		var zoom = 5.2
 
 	}
 	else if (sel_val === "OR"){
 		var lat = 43.804133
 
 		var long = -120.554201
-		var zoom = 5
+		var zoom = 5.2
 
 	}
 	else if (sel_val === "SD"){
-		var lat = 43.969515
+		var lat = 44.969515
 
-		var long = -99.901813
-		var zoom = 5
+		var long = -100.201813
+		var zoom = 5.2
 
 	}
 	else if (sel_val === "TX"){
-		var lat = 31.968599
+		var lat = 31.568599
 
 		var long = -99.901813
-		var zoom = 4
+		var zoom = 4.3
 
 
 	}
@@ -443,35 +487,35 @@ function getVals(sel_val){
 
 		var long = -111.093731
 
-		var zoom = 5
+		var zoom = 5.1
 
 	}
 	else if (sel_val === "VA"){
-		var lat = 37.431573
+		var lat = 37.931573
 
-		var long = -78.656894
-		var zoom = 5
+		var long = -78.956894
+		var zoom = 5.2
 
 	}
 	else if (sel_val === "WA"){
 		var lat = 47.751074
 
 		var long = -120.740139
-		var zoom = 5
+		var zoom = 5.2
 
 	}
 	else if (sel_val === "WV"){
 		var lat = 38.597626
 
 		var long = -80.454903
-		var zoom = 5
+		var zoom = 5.4
 
 	}
 	else if (sel_val === "WY"){
 		var lat = 43.075968
 
 		var long = -107.290284
-		var zoom = 5
+		var zoom = 5.3
 
 	}
 	else {

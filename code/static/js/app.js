@@ -1,15 +1,6 @@
-// function getColor(depth){
-//   return depth > 500000 ? '#770505' :
-//          depth > 250000 ? '#ba0b0b' :
-//          depth > 100000 ? '#d24f2b' :
-//          depth > 50000 ? '#dc761d' :
-//          depth > 0 ? '#f2ba28' :
-//                       '#f2ba28' ;
-         
-// }
+//HERE WE GO!!
 
-
-
+//Set options for custom markers
 var flameIcon = L.Icon.extend({
   options: {
       shadowUrl: 'static/images/flame_shadow.png',
@@ -17,10 +8,11 @@ var flameIcon = L.Icon.extend({
       shadowSize:   [10, 30],
       iconAnchor:   [5, 30],
       shadowAnchor: [6, 31],
-      popupAnchor:  [-3, -76]
+      popupAnchor:  [0, -10]
   }
 });
 
+//Set path for custom marker images
 var flame1Icon = new flameIcon({iconUrl: 'static/images/flame1.png'}),
   flame2Icon = new flameIcon({iconUrl: 'static/images/flame2.png'}),
   flame3Icon = new flameIcon({iconUrl: 'static/images/flame3.png'}),
@@ -32,6 +24,7 @@ var flame1Icon = new flameIcon({iconUrl: 'static/images/flame1.png'}),
 };
 
 
+//Create the year slider
 var slider = new rSlider({
   target: '#slider',
   // values: [2010, 2011, 2012, 2013, 2014, 2015],
@@ -39,12 +32,14 @@ var slider = new rSlider({
   range: true,
   set: [2007, 2007],
   onChange: function(vals){
+    //call the add markers function every time the slider changes.
+    //Pass vals to it
     addMarkers(vals)
   }
 
 });
 
-
+//Create the leaflet map
 var myMap = L.map("map", {
     center: [39.78394, -97.36682],
     zoom: 4
@@ -59,38 +54,62 @@ var myMap = L.map("map", {
   }).addTo(myMap);
   
   
+  //Save the values for the slider
+  var vals = slider.getValue()
+
+  //Create a variable layergroup so it can be destroyed.
   var markers = L.layerGroup()
 
 
+  //Creating legend only needs to happen once, build it outside of function
+  //Add it to the map
+  var legend = L.control({position: 'bottomright', opacity: 1});
+  legend.onAdd = function (myMap) {
 
-  var vals = slider.getValue()
+      var div = L.DomUtil.create('div', 'info legend'),
+      depthArray = [0, 50000, 100000, 250000, 500000],
+      labels = [];
 
-  var link = "../static/data/us_states_500k.json"
+      // loop through our density intervals and generate a label with a colored square for each interval
+      for (var i = 0; i < depthArray.length; i++) {
+          div.innerHTML +=
+              '<i style="background:' + getColor(depthArray[i] + 1) + '  "></i> ' + '&nbsp&nbsp&nbsp' +
+              depthArray[i] + (depthArray[i + 1] ? '&ndash;' + depthArray[i + 1] + '<br>' : '+');
+      }
+
+      return div;
+  };
+
+  legend.addTo(myMap)
+
+  
   
   function addMarkers(vals){
   // Add a marker to the map for each crime
+  
 
+  //Get my json response
+  d3.json("/data").then(function(response){    
 
+    console.log(response)
 
-  Promise.all([d3.json("/data"), d3.json("/state")]).then(function(response){
-
-    
-    
-    console.log(response[0])
-
+    //clear all the markers before we recreate them
     markers.clearLayers();
 
-    years = vals.split(",")
-    year1 = parseInt(years[0])
-    year2 = parseInt(years[1])
+    var years = vals.split(",")
+    var year1 = years[0]
+    var year2 = years[1]
    
 
     console.log(year1, year2)
 
-    var filteredData = response[0].filter(function(data) {
+    //Filter the response by years
+    var filteredData = response.filter(function(data) {
       return data.fire_year >= year1  && data.fire_year <= year2;
     })
   
+    //For each item, grab latitude, longitude, and size.
+    //Also set the mapIcon based on size
     filteredData.forEach(function(data){
         
         var latitude = data.latitude
@@ -114,48 +133,35 @@ var myMap = L.map("map", {
           var mapIcon = flame1Icon
         }
 
+        //Check if lat/long exists, if so create the marker
         if (latitude || longitude){
                 var marker = L.marker([latitude, longitude],{
                 icon: mapIcon
-            }).bindPopup(`<h3>${data.fire_name}</h3> <hr> 
-            <h5>Status: ${data.fire_year}}`);
+            }).bindPopup(`<b>${data.fire_name}</b><hr> 
+            Year: ${data.fire_year}<br>Size: ${data.fire_size} Acres`);
 
+            //Add marker to the markers layergroup
             markers.addLayer(marker);
         }
     });
 
+    //Add markers layer to the map
     myMap.addLayer(markers)
 
+      
 
-    // var legend = L.control({position: 'bottomright'});
-    // legend.onAdd = function (myMap) {
+    //CREATING PLOTLY TOP 10 BAR CHART
+    //////////////////////////////////
+    //////////////////////////////////
 
-    //     var div = L.DomUtil.create('div', 'info legend'),
-    //     depthArray = [0, 50000, 100000, 250000, 500000],
-    //     labels = [];
-
-    //     // loop through our density intervals and generate a label with a colored square for each interval
-    //     for (var i = 0; i < depthArray.length; i++) {
-    //         div.innerHTML +=
-    //             '<i style="background:' + depthArray[i] + 1 + '  "></i> ' + '&nbsp&nbsp&nbsp' +
-    //             depthArray[i] + (depthArray[i + 1] ? '&ndash;' + depthArray[i + 1] + '<br>' : '+');
-    //     }
-
-    //     return div;
-    // };
-
-    // legend.addTo(myMap)
-
-
-
-       
-
+    //Save top 10 fires from filtered data to a variable
     var top10Fires = filteredData.filter(function(d, i){
       return i<10
     })
 
     console.log(top10Fires)
 
+    //Save the size, name, and fire id to individual variables
     var topFiresSize =  top10Fires.map(function(d){
       return d.fire_size
     });
@@ -171,14 +177,15 @@ var myMap = L.map("map", {
     console.log("topFireSize", topFiresSize)
     console.log("topFireName", topFiresName)
 
+    
+    //Create the bar chart
     var trace1 = {
       x: topFiresSize,
       y: topFiresName,
       name: topFiresID,
       type: "bar",
       orientation: "h",
-      text: `topFiresID`,
-      // opacity: 0.5,
+      text: "Number of Acres",
       marker: {
       color: '#ba0b0b',
       line: {
@@ -216,7 +223,7 @@ var myMap = L.map("map", {
         },
         plot_bgcolor: 'white',
         xaxis: {
-            title:"<b>Number of Acres</b>",
+            title:"<b>Acres Affected</b>",
             titlefont: {
               size: 18,
               color: '2d2d2d'
@@ -238,216 +245,78 @@ var myMap = L.map("map", {
           
         }
       };
-    
-    Plotly.newPlot("bar", plotData, layout)
 
-
-  //   var svgArea = d3.select("#scatter").select("svg");
-
-  //   // clear svg is not empty
-  //   if (!svgArea.empty()) {
-  //   svgArea.remove();
-  //   }
-    
-  //   svgWidth = document.getElementById('scatter').clientWidth;
-  //   svgHeight = svgWidth / 1.45;
-    
-  //   var border=1;
-  //   var bordercolor='gray';
-
-  //   // Append SVG element
-  //   var svg = d3
-  //       .select("#scatter")
-  //       .append("svg")
-  //       .attr("height", svgHeight)
-  //       .attr("width", svgWidth)
-  //       .attr("border", border);
-
-  //   //create the border for the object
-  //   var borderPath = svg.append("rect")
-  //       .attr("x", 0)
-  //       .attr("y", 0)
-  //       .attr("height", svgHeight)
-  //       .attr("width", svgWidth)
-  //       .style("stroke", bordercolor)
-  //       .style("fill", "none")
-  //       .style("stroke-width", border);
-
-  //   //create the margins for the plot
-  //   var margin = {
-  //       top: 75,
-  //       bottom: 75,
-  //       right: 75,
-  //       left: 75
-  //   };
-
-  //   //calculate the chart width and height
-  //   var chartHeight = svgHeight - margin.top - margin.bottom;
-  //   var chartWidth = svgWidth - margin.left - margin.right;
-
-  //   // Append group element
-  //   var chartGroup = svg.append("g")
-  //       .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-
-
-  //     //calculate the scales
-  //     var xScale = d3.scaleLinear()
-  //     .domain([d3.min(filteredData, d => d.burning_days)/1.35, d3.max(filteredData, d => d.burning_days)*1.15])
-  //     .range([0, chartWidth]);
-
-  //     var yScale = d3.scaleLinear()
-  //     .domain([d3.min(filteredData, d => d.fire_size)/5, d3.max(filteredData, d => d.fire_size)*1.35])
-  //     .range([chartHeight, 0]);
-
-  //     // create axes
-  //     var xAxis = d3.axisBottom(xScale).ticks(6);
-  //     var yAxis = d3.axisLeft(yScale).ticks(6);
-
-  //     // append axes
-  //     chartGroup.append("g")
-  //         .attr("transform", `translate(0, ${chartHeight})`)
-  //         .call(xAxis);
-
-  //     chartGroup.append("g")
-  //         .call(yAxis);
-
-  //     var radius = 10
-
-  //     // Add a tooltip div. Here I define the general feature of the tooltip: stuff that do not depend on the data point.
-  //     // Its opacity is set to 0: we don't see it by default.
-  //     var tooltip = d3.select("#scatter")
-  //     .append("div")
-  //     .style("opacity", 0)
-  //     .attr("class", "tooltip")
-  //     .style("background-color", "white")
-  //     .style("border", "solid")
-  //     .style("border-width", "1px")
-  //     .style("border-radius", "5px")
-  //     .style("padding", "10px")
-
-
-  //     // A function that change this tooltip when the user hover a point.
-  //     // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
-  //     var mouseover = function(d) {
-  //       tooltip
-  //         .style("opacity", 1)
-  //     }
-
-  //     var mousemove = function(d) {
-  //       tooltip
-  //         .html("The exact value of<br>the Ground Living area is: " + d.fire_size)
-  //         .style("left", d3.select(this).attr("cx") + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-  //         .style("top", d3.select(this).attr("cy") + "px")
-  //     }
-
-  //     // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-  //     var mouseleave = function(d) {
-  //       tooltip
-  //         .transition()
-  //         .duration(200)
-  //         .style("opacity", 0)
-  // }
-
-
-
-
-  //     //create the circles
-  //     var circlesGroup = chartGroup.append("g")
-  //     .selectAll("circle")
-  //     .data(filteredData)
-  //     .enter()
-  //     .append("circle")
-  //     .attr("class", "fireCircle")
-  //     .attr("cx", d => xScale(d.burning_days))
-  //     .attr("cy", d => yScale(d.fire_size))
-  //     .attr("r",  15)
-  //     .on("mouseover", onMouse(filteredData) )
-  //     .on("mousemove", mousemove )
-  //     .on("mouseleave", mouseleave )
-      
 
     
-
-      // // Create axes labels
-      // chartGroup.append("text")
-      // .attr("transform", "rotate(-90)")
-      // .attr("y", 0 - margin.left)
-      // .attr("x", 0 - (chartHeight / 2))
-      // .attr("dy", "1em")
-      // .attr("class", "axisText")
-      // .attr("font-weight", "bold")
-      // .text("Fire Size");
+    Plotly.newPlot("bar", plotData, layout) 
 
 
-      // chartGroup.append("text")
-      // .attr("transform", `translate(${(chartWidth / 2)- 80}, ${chartHeight + margin.top - 30})`)
-      // .attr("class", "axisText")
-      // .attr("font-weight", "bold")
-      // .text("Days Before Contained");
-      
-      // //create the tooltips
-      // var toolTip = d3.tip()
-      // .attr("class", "d3-tip") //toolTip doesn't have a "classed()" function like core d3 uses to add classes, so we use the attr() method.
-      // .offset([80, 50]) // (vertical, horizontal)
-      // .html(function(d) {
-      //     return (`${d.fire_year}<br>Poverty: ${d.fire_size}%
-      //     <br>Healthcare: ${d.burning_days}%`);
-      // });
-          
-      // // Create the tooltip in chartGroup.
-      // circlesGroup.call(toolTip);
 
-      // //Create "mouseover" event listener to display tooltip
-      // circlesGroup.on("mouseover", function(d) {
-      //     toolTip.show(d, this);
-      // })
-      
-      // //Create "mouseout" event listener to hide tooltip
-      //     .on("mouseout", function(d) {
-      //     toolTip.hide(d);
-      //     });
-              
-      d3.select("#scatter").remove()
+    ///CREATING A CHART JS SCATTER PLOT
+    //////////////////////////////////
+    /////////////////////////////////
 
+    //Blast away the scatter plot if it exists
+    d3.select("#scatter").remove()
 
-      d3.select("#canvasScatterChart")
-			.append("canvas")
-			.attr("id", "scatter")
-      
-      
     
-      var scatterData = filteredData.map(function(d){
-        return { 
-          x: d.fire_size,
-          y: d.burning_days
+    //Add a fresh clean on back to the html
+    d3.select("#canvasScatterChart")
+    .append("canvas")
+    .attr("id", "scatter")
+    
+    
+    //Grab burning_days and fire_size and save it to a variable
+    var scatterData = filteredData.map(function(d){
+      return { 
+        x: d.burning_days,
+        y: d.fire_size,
 
-        }
-      })
-  
-      console.log("scatterData", scatterData)
+      }
+    })
 
-      var ctxScatter = document.getElementById('scatter').getContext('2d');
+    //Grab name and fire year and save it to a variable
+    var scatterDataLabels = filteredData.map(function(d){
+      return [d.fire_name, d.fire_year]
+    })
 
-      var scatterChart = new Chart(ctxScatter, {
-        type: 'scatter',
-        data: {
-            datasets: [{
-                label: 'Fire Size vs. Day Before Contained',
-                backgroundColor: '#ff8827',
-                borderColor: '#898888',
-                pointRadius: 8,
-                data: scatterData
-            }]
+
+    console.log("scatterData", scatterData)
+    console.log("names", scatterDataLabels)
+    
+
+    //Create the scatter plot
+    var ctxScatter = document.getElementById('scatter').getContext('2d');
+
+    var scatterChart = new Chart(ctxScatter, {
+      type: 'scatter',
+      data: {
+          labels: scatterDataLabels,
+          datasets: [{
+              label: 'Fire Size vs. Days Before Contained',
+
+              backgroundColor: '#ff8827',
+              borderColor: '#898888',
+              pointRadius: 8,
+              data: scatterData
+          }]
+      },
+      options: {
+        tooltips: {
+          callbacks: {
+              label: function(tooltipItem, data) {
+                var label = data.labels[tooltipItem.index];
+                return [label[0], "Year: " + label[1], "Wildfire Size: " + tooltipItem.xLabel, "Days Before Contained: " + tooltipItem.yLabel]
+              }
+          }
         },
-        options: {
-            scales: {
-                xAxes: [{
-                    type: 'linear',
-                    position: 'bottom'
-                }]
-            }
-        }
+          scales: {
+              xAxes: [{
+                  type: 'linear',
+                  position: 'bottom'
+              }]
+          }
+      }
     });
 
 
@@ -456,8 +325,16 @@ var myMap = L.map("map", {
       console.log(error);
   });
 
-    
+}
 
-
+//Get color function for legend
+function getColor(d){
+  return d > 500000 ? '#770505' :
+         d > 250000 ? '#ba0b0b' :
+         d > 100000 ? '#d24f2b' :
+         d > 50000 ? '#dc761d' :
+         d > 0 ? '#f2ba28' :
+                      '#f2ba28' ;
+         
 }
 

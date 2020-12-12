@@ -29,7 +29,7 @@ body {
     width: 40px;
     height: 20px;
     float: left;
-    opacity: 0.7;
+    opacity: 1;
   }
 
   .jumbotron{margin-top: 20px;
@@ -63,6 +63,7 @@ body {
 
 #scatter {background-color: #ffffff;}
 
+hr { margin: 2px; }
 
 /* = Summary */
 
