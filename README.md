@@ -1,5 +1,5 @@
 # Group 3 Project 2 – US Wildfires Database<br/>
-Members: 	Kaylon Young, Behrouz Zand, Rob Pascarella, Tobias Judd<br/>
+Members: 	Kaylon Young, Rob Pascarella, Tobias Judd<br/>
 
 # Abstract:<br/>
 
@@ -25,6 +25,15 @@ The websites that are used in this project include: <br/>
 3. Fire type by location and size using Leaflet. <br/>
 4. Slider of events using Javascript https://plotly.com/javascript/sliders/ <br/>
 5. Proposed library to be used www.chartjs.org <br/>
+
+# Recreating Application
+1. Create a postgres database with database called wildfires_db
+2. Run create_tables_wildfires.sql file to create wildfires table
+3. Import fires_ClassG_YEAR2000_2015.csv into wildfires table
+4. Create config.py project directory and update with database password.  Variable name 'Posgres_Pswrd'
+5. Create config.js to code/static/js and update with mapbox api_key. Variable name is API_KEY.
+6. In Gitbash or commandline, browse to the project2/code folder.  Then type python app.py.
+7. Open a browser window and enter localhost:5000.  The application should run.
 
 
 ![image](https://i.pinimg.com/originals/bf/e7/e1/bfe7e1743686333c87dc50ea763d70c0.jpg)
